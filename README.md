@@ -2,6 +2,8 @@
 
 React + TypeScript dashboard for production timeline analytics (Noviga assignment).
 
+**Live demo:** https://timeline-dashboard-rho.vercel.app
+
 ## Setup
 
 ```bash
@@ -25,3 +27,9 @@ Set `VITE_API_BASE_URL` in `.env` (default: `https://fractaldmsdev.centralindia.
 - Query dates: 22–25 June 2026
 
 See [NOTES.md](./NOTES.md) for architecture decisions.
+
+## Deployment
+
+Production is hosted on Vercel: https://timeline-dashboard-rho.vercel.app
+
+Set `VITE_API_BASE_URL` in the Vercel project environment (already configured for production).
