@@ -12,6 +12,8 @@ npm run dev
 Test credentials: `analytics_user` / `dashboard123`  
 Data dates: **22–25 June 2026**
 
+**Live demo:** https://timeline-dashboard-rho.vercel.app
+
 ---
 
 ## Session & token management
@@ -64,9 +66,9 @@ All API timestamps are UTC. UI uses **Asia/Kolkata (IST, +05:30)** via `date-fns
 ## Assumptions & scope cuts
 
 **Assumptions:**
-- Asset selector flattens the full tree with indentation; default selects first line-level node (`assetlevel_id === 20`).
+- Asset selector flattens the full tree with indentation; default selects the first site-level node (`assetlevel_id === 40`, falling back to line/machine levels).
 - Hourly chart markers (toggle off) use bucket midpoint + cumulative totals; cumulative line connects hourly points.
-- Downtime types other than `unknown` still map to the “Unknown Downtime” table row when not explicitly classified (backend sample is mostly `unknown`).
+- Hourly table **Unknown Downtime** counts only `type: "unknown"` downtimes (per assignment §2.4). The chart still renders planned/unplanned/unknown downtime bands with distinct colours via `classifyDowntime()`; those non-unknown minutes are visible on the chart but intentionally excluded from the table rows.
 
 **Out of scope (per assignment):** segment classification dialogs, auto-refresh/polling, export, i18n, multi-theme, asset hierarchy browser view, “Point labels” toggle from screenshots, NOW indicator, asset-level filter from screenshots.
 

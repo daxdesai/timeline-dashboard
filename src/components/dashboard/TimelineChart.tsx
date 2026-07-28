@@ -177,12 +177,17 @@ export function TimelineChart({
       ctx.beginPath()
       ctx.strokeStyle = '#1565c0'
       ctx.lineWidth = 2
+      let lineStarted = false
       for (const m of allRenderMarkers) {
         if (m.x < MARGIN.left || m.x > MARGIN.left + chartWidth) continue
-        if (m === allRenderMarkers[0]) ctx.moveTo(m.x, m.y)
-        else ctx.lineTo(m.x, m.y)
+        if (!lineStarted) {
+          ctx.moveTo(m.x, m.y)
+          lineStarted = true
+        } else {
+          ctx.lineTo(m.x, m.y)
+        }
       }
-      ctx.stroke()
+      if (lineStarted) ctx.stroke()
     }
 
     for (const m of displayMarkers) {
@@ -256,7 +261,6 @@ export function TimelineChart({
   )
 
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!e.shiftKey) return
     const rect = canvasRef.current?.getBoundingClientRect()
     if (!rect) return
     const x = e.clientX - rect.left
@@ -312,7 +316,8 @@ export function TimelineChart({
     { kind: 'runtime', label: 'Runtime' },
     { kind: 'unplannedProduction', label: 'Unplanned Production' },
     { kind: 'plannedDowntime', label: 'Planned Downtime' },
-    { kind: 'unknownDowntime', label: 'Unplanned Downtime' },
+    { kind: 'unplannedDowntime', label: 'Unplanned Downtime' },
+    { kind: 'unknownDowntime', label: 'Unknown Downtime' },
     { kind: 'stoppage', label: 'Minor Stoppage' },
   ]
 
@@ -390,7 +395,7 @@ export function TimelineChart({
       </Box>
 
       <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
-        Shift + drag to zoom into a time range · double-click to reset
+        Drag to zoom into a time range · double-click to reset
         {!showIndividualProduces && ' · Colored line = cumulative production (OK + NG)'}
         {showIndividualProduces && ' · Circles = PASS, Crosses = FAIL'}
       </Typography>

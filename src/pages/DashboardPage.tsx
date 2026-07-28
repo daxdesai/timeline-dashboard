@@ -7,7 +7,7 @@ import {
   Typography,
 } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { ApiError } from '../api/client'
+import { formatApiErrorMessage } from '../api/client'
 import { FilterBar } from '../components/dashboard/FilterBar'
 import { HourlySummaryTable } from '../components/dashboard/HourlySummaryTable'
 import { TimelineChart } from '../components/dashboard/TimelineChart'
@@ -43,14 +43,9 @@ export function DashboardPage() {
 
   const dashboard = useDashboardData(filters)
 
-  const errorMessage =
-    dashboard.error instanceof ApiError
-      ? dashboard.error.statusCode === 403
-        ? 'Access denied.'
-        : dashboard.error.message
-      : dashboard.error instanceof Error
-        ? dashboard.error.message
-        : null
+  const errorMessage = dashboard.error
+    ? formatApiErrorMessage(dashboard.error)
+    : null
 
   return (
     <Box>

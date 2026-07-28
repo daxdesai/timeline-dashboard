@@ -9,7 +9,7 @@ import {
 } from '@mui/material'
 import { useState, type FormEvent } from 'react'
 import { Navigate } from 'react-router-dom'
-import { ApiError, UnauthorizedError } from '../api/client'
+import { ApiError, formatApiErrorMessage, UnauthorizedError } from '../api/client'
 import { useAuth } from '../auth/AuthContext'
 
 export function LoginPage() {
@@ -55,10 +55,8 @@ export function LoginPage() {
     } catch (err) {
       if (err instanceof UnauthorizedError || (err instanceof ApiError && err.statusCode === 401)) {
         setError(err.message || 'Invalid credentials.')
-      } else if (err instanceof ApiError && err.statusCode === 403) {
-        setError('Access denied.')
       } else {
-        setError(err instanceof Error ? err.message : 'Login failed.')
+        setError(formatApiErrorMessage(err))
       }
     } finally {
       setLoading(false)

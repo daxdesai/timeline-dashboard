@@ -51,11 +51,14 @@ function normalizeSegments(data: MachineIntervalsData): SegmentKind[] {
   }
 
   for (const dt of data.downtimes ?? []) {
+    const isUnknown =
+      dt.type.toLowerCase() === 'unknown' ||
+      dt.downtime_name.toLowerCase() === 'unknown'
+    if (!isUnknown) continue
     segments.push({
       startMs: utcToIstMs(dt.start_at),
       endMs: utcToIstMs(dt.end_at),
-      category:
-        dt.type.toLowerCase() === 'unknown' ? 'unknownDowntime' : 'unknownDowntime',
+      category: 'unknownDowntime',
     })
   }
 

@@ -113,7 +113,7 @@ export function drawMarker(
 
   ctx.beginPath()
   ctx.arc(marker.x, marker.y, marker.radius, 0, Math.PI * 2)
-  ctx.fillStyle = showIndividual ? PASS_FILL : PASS_FILL
+  ctx.fillStyle = showIndividual ? PASS_FILL : PASS_COLOR
   ctx.fill()
   ctx.strokeStyle = PASS_COLOR
   ctx.lineWidth = 1.5
