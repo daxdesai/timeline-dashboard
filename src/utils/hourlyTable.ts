@@ -10,6 +10,7 @@ import {
   bucketStartToIstClockHourMs,
   utcToIstMs,
 } from './timezone'
+import { classifyDowntime } from './chartData'
 import {
   type ClockHourBucket,
   formatMinutes,
@@ -32,7 +33,13 @@ export interface HourlyTableData {
 interface SegmentKind {
   startMs: number
   endMs: number
-  category: 'runtime' | 'unplannedProduction' | 'stoppage' | 'unknownDowntime'
+  category:
+    | 'runtime'
+    | 'unplannedProduction'
+    | 'stoppage'
+    | 'unknownDowntime'
+    | 'plannedDowntime'
+    | 'unplannedDowntime'
 }
 
 function normalizeSegments(data: MachineIntervalsData): SegmentKind[] {
@@ -54,8 +61,7 @@ function normalizeSegments(data: MachineIntervalsData): SegmentKind[] {
     segments.push({
       startMs: utcToIstMs(dt.start_at),
       endMs: utcToIstMs(dt.end_at),
-      category:
-        dt.type.toLowerCase() === 'unknown' ? 'unknownDowntime' : 'unknownDowntime',
+      category: classifyDowntime(dt.type, dt.downtime_name),
     })
   }
 
@@ -182,6 +188,14 @@ export function buildHourlyTable(
     ),
     mkRow('stoppage', 'Stoppage', (b) =>
       formatMinutes(minutesForCategory(segments, b, 'stoppage', nowMs)),
+    ),
+    mkRow('plannedDowntime', 'Planned Downtime', (b) =>
+      formatMinutes(minutesForCategory(segments, b, 'plannedDowntime', nowMs)),
+    ),
+    mkRow('unplannedDowntime', 'Unplanned Downtime', (b) =>
+      formatMinutes(
+        minutesForCategory(segments, b, 'unplannedDowntime', nowMs),
+      ),
     ),
     mkRow('unknownDowntime', 'Unknown Downtime', (b) =>
       formatMinutes(minutesForCategory(segments, b, 'unknownDowntime', nowMs)),

@@ -177,12 +177,17 @@ export function TimelineChart({
       ctx.beginPath()
       ctx.strokeStyle = '#1565c0'
       ctx.lineWidth = 2
+      let lineStarted = false
       for (const m of allRenderMarkers) {
         if (m.x < MARGIN.left || m.x > MARGIN.left + chartWidth) continue
-        if (m === allRenderMarkers[0]) ctx.moveTo(m.x, m.y)
-        else ctx.lineTo(m.x, m.y)
+        if (!lineStarted) {
+          ctx.moveTo(m.x, m.y)
+          lineStarted = true
+        } else {
+          ctx.lineTo(m.x, m.y)
+        }
       }
-      ctx.stroke()
+      if (lineStarted) ctx.stroke()
     }
 
     for (const m of displayMarkers) {

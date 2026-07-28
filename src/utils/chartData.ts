@@ -46,7 +46,7 @@ function classifyRuntime(type: string): TimelineSegmentKind {
   return 'runtime'
 }
 
-function classifyDowntime(type: string, name: string): TimelineSegmentKind {
+export function classifyDowntime(type: string, name: string): TimelineSegmentKind {
   const t = type.toLowerCase()
   const n = name.toLowerCase()
   if (t === 'unknown' || n === 'unknown') return 'unknownDowntime'
